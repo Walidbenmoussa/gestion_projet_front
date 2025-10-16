@@ -22,10 +22,10 @@
         </UFormField>
 
         <UFormField label='Mot de passe'>
-          <Upassword v-model="user.psw" type='password' class="w-full" required />
+          <Upassword v-model="user.psw"  class="w-full" required />
         </UFormField>
-           <UFormField label='COnfirmatio mot de passe'>
-          <Upassword v-model="psw_verif" type='password' class="w-full" required />
+           <UFormField label='Confirmatio mot de passe'>
+          <Upassword v-model="psw_verif"  class="w-full" required />
         </UFormField>
       <template #footer>
           <UButton label="Enregitrer" block class="flex-1" @click="submitUser" />
