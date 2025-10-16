@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     try{
       
-        if (to.path !== '/login' && to.path!=='/create_user'  ) {
+        if (to.path !== '/login' && to.path!=='/test'  ) {
             if( ! user.value?.id ){
                 return router.push('/login')
             }
