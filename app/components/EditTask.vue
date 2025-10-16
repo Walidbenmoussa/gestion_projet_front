@@ -1,5 +1,5 @@
 <template>
-  <UModal v-model:open="showEdit" class="w-xs" title="Modifier Tache">
+  <UModal v-model:open="show" class="w-xs" title="Modifier Tache">
     <template #body>
 
       <UForm @submit.prevent="submitTask" :state="editTask" :validate="validate_form">
@@ -32,7 +32,7 @@
         <div class="flex flex-col gap-2 mt-4">
           <UButton label="Enregitrer" block class="flex-1" type="submit" />
           <UButton label="Réinitialiser" block class="flex-1" color="neutral" @click="reset" />
-          <UButton label="Fermer" block class="flex-1" color="warning" @click="showEdit = false" />
+          <UButton label="Fermer" block class="flex-1" color="warning" @click="show = false" />
         </div>
 
       </UForm>
@@ -46,18 +46,21 @@ import type { Task } from '~/types'
 
 const IP = useCookie('IP')
 const toast = useToast()
-const today = new Date()
 
-const showEdit = defineModel('showEdit')
-const editTask = defineModel<Task>('editTask')
-const edit_fixe = ref()
+const show= ref(false)
+
+const editTask = ref<Task>()
+const edit_fixe = ref<Task>()
 
 const emits = defineEmits(['close_success'])
 
-onMounted(() => {
-  edit_fixe.value = { ...editTask.value }
-  console.log(edit_fixe)
-})
+
+const open = (t:Task)=>{
+  editTask.value = {...t}
+  edit_fixe.value={...t}
+  show.value=true
+
+}
 
 const validate_form = (t: Task) => {
   const errors = []
@@ -84,6 +87,7 @@ function reset() {
 
 const submitTask = async () => {
   try {
+    delete editTask.value?.user
     const response = await $fetch(`${IP.value}/task`, {
       method: 'patch',
       credentials: 'include',
@@ -91,7 +95,7 @@ const submitTask = async () => {
       watch: false
     })
     toast.add({ description: response, color: 'primary', progress: false, class: 'bg-primary' })
-    showEdit.value=false
+    show.value=false
     emits('close_success')
 
   }
@@ -107,5 +111,5 @@ const submitTask = async () => {
 
 
 }
-
+defineExpose({open})
 </script>
