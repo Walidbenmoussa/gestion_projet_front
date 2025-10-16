@@ -6,7 +6,7 @@
     </template>
   </UHeader>
 
-  <UMain class="p-4 w-full">
+  <UPage class="p-4 w-full">
     <UTable ref="task_table" :data="tasks" :columns="cols"
       class="w-auto scroll-auto border-2 border-accented/30 mx-auto rounded-xl ">
 
@@ -47,21 +47,21 @@
 
 
     </UTable>
-  </UMain>
-
-  <UConfirmation msg_annulation="Annuler" msg_confirmation="Confirmer la suppression"
-    :msg_body="'Confirmer la suppression de : ' + task_delete?.nom" v-model:open="Mdelete"
-    @confirmation="sumbit_delete" />
+    <UConfirmation msg_annulation="Annuler" msg_confirmation="Confirmer la suppression"
+      :msg_body="'Confirmer la suppression de : ' + task_delete?.nom" v-model:open="Mdelete"
+      @confirmation="sumbit_delete" />
 
 
-  <NewTask class="max-w-screen" :id_project="id_project" v-model="Madd" @close_success="closeNewTask" />
-  <EditTask class="max-w-screen" :id_project="id_project" v-model:show-edit="Medit" v-model:edit-task="task_edit"
-    @close_success="closeEditTask" />
+    <NewTask class="max-w-screen" :id_project="id_project" v-model="Madd" @close_success="closesTask" />
+    <EditTask class="max-w-screen" :id_project="id_project" ref="edit_task" @close_success="closesTask" />
 
-  <UConfirmation msg_annulation="Annuler" msg_confirmation="Confirmer" :msg_body="msg_confirmation_changement"
-    @confirmation="submit_user_change" v-model:open="Mchanger" />
+    <UConfirmation msg_annulation="Annuler" msg_confirmation="Confirmer" :msg_body="msg_confirmation_changement"
+      @confirmation="submit_user_change" v-model:open="Mchanger" />
 
-  <Comments :task="task_comments" ref="Mcomments"></Comments>
+    <Comments :task="task_comments" ref="Mcomments"></Comments>
+  </UPage>
+
+
 </template>
 
 
@@ -80,7 +80,7 @@ const tasks = ref<Task[]>([])
 
 const Mdelete = ref(false)
 const Madd = ref(false)
-const Medit = ref(false)
+const edit_task = useTemplateRef('edit_task')
 const Mchanger = ref(false)
 const Mcomments = useTemplateRef('Mcomments')
 
@@ -184,8 +184,7 @@ function items_action(t: Task): DropdownMenuItem[] {
     label: 'Modifier',
     icon: '',
     onSelect: () => {
-      task_edit.value = { ...t }
-      Medit.value = true
+      edit_task.value?.open(t)
     }
   },
   {
@@ -200,18 +199,12 @@ function items_action(t: Task): DropdownMenuItem[] {
 
 }
 
-const closeNewTask = async () => {
+const closesTask = async () => {
   await project_tasks.execute()
   tasks.value = [...project_tasks.data.value]
 }
 
-const closeEditTask = async () => {
 
-  const i = tasks.value.findIndex(p => (p.id == task_edit.value.id))
-  console.log(tasks.value[i])
-  tasks.value[i] = { ...task_edit.value }
-
-}
 
 const sumbit_delete = async () => {
   Mdelete.value = false
@@ -250,7 +243,7 @@ const submit_user_change = async () => {
       method: 'patch',
       credentials: 'include'
     })
-      row_to_edit.value.original.user = { ...new_user.value }
+    row_to_edit.value.original.user = { ...new_user.value }
 
   }
 
