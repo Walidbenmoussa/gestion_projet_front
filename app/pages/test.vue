@@ -1,5 +1,4 @@
 <template>
-<template>
   <UHeader title="Page test" :toggle="false">
      <template #right>
     </template>
