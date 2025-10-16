@@ -15,7 +15,7 @@
       </UFormField>
 
       <UFormField label='Mot de passe'>
-        <UInput v-model="user.psw" type='password' class="w-full" required />
+        <Upassword v-model="user.psw"  class="w-full" required />
       </UFormField>
       <template #footer>
         <UButton label="Se connecter" block class="flex-1" @click="submit" />
