@@ -1,6 +1,6 @@
 <template>
 
-    <UHeader to="" title="Mes Projets" :toggle="null">
+    <UHeader :to="null" :title="null" :toggle="null">
 
     </UHeader>
     <UCard class="mt-4" >
