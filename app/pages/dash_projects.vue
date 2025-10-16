@@ -21,9 +21,9 @@
           <h3>Priorité :</h3>
           <UBadge :label="p.priorite" :color="couleur_priorite(p.priorite)" variant="outline" />
         </div>
-        <h4>Date dèbut : {{ p.date_debut }}</h4>
+        <h4>Date dèbut : {{new Date(p.date_debut).toLocaleDateString() }}</h4>
 
-        <h4>Date fin : {{ p.date_fin }}</h4>
+        <h4>Date fin : {{new Date(p.date_fin).toLocaleDateString() }}</h4>
 
         <UAccordion label="description" class="text-xs" :items="[{ 'label': 'description', 'icon': 'i-lucide-eye' }]">
           <template #content>
